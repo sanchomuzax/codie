@@ -70,6 +70,18 @@ Időrendi napló a Codie BLE-vezérlés felélesztéséről. A tartós technikai
   SpeakBeep busy-interrupt nem vonatkozik a szenzorolvasásra). Eszköz: `scripts/mic_beep.py`.
 - Pitch méréséhez: telefonos felvétel + FFT, vagy fizikai teardown (buzzer vs passzív piezo).
 
+### Csipogó frekvencia mérve — valószínűleg önrezgő piezo-buzzer (v0.6.0 FFT)
+- Telefonos felvétel + `scripts/fft_pitch.py`: **domináns ~2483 Hz** (~D#7), a klasszikus
+  önrezgő piezo-buzzer sávban (~2–3 kHz).
+- Felharmonikusok gyengék (4./5. −23…−28 dB), és **nincs erős 3. felharmonikus** — vagyis NEM
+  négyszögjellel hajtott passzív elem (annak erős páratlan felharmonikusai lennének, vö. a
+  2700 Hz-es négyszögjel-teszt: 3. felharmonikus −9,5 dB).
+- **Következtetés:** valószínűleg önrezgő buzzer, a hangmagasság **hardveresen fix** → firmware-
+  hackkel sem módosítható; a `SpeakBeep` csak ki/be (hossz+ritmus). Variálható pitch-hez fizikai
+  alkatrészcsere + PWM-firmware kéne (nem éri meg, brick-kockázat).
+- Fenntartás: telefonmikrofon elnyomhatja a magas felharmonikusokat; 100%-os válasz a fizikai
+  teardown / szkóp a buzzer lábán. De az alaphang és a hiányzó 3. felharmonikus robusztus jel.
+
 ### Nyitott szálak
 - Szenzorolvasás notify-csatornán (akku `0x1069` lenne az első jó teszt — tényleges adat vissza).
 - LED-vezérlés (`0x1065`) HSV-vel.
