@@ -11,7 +11,8 @@ import asyncio
 
 from bleak import BleakClient
 
-from . import protocol as p
+from . import morse, protocol as p
+from . import tunes
 
 
 class CodieClient:
@@ -92,6 +93,26 @@ class CodieClient:
 
     async def beep(self, duration_ms: int = 1000) -> dict | None:
         return await self._send(p.CMD_SPEAK_BEEP, p.beep_args(duration_ms))
+
+    async def play_rhythm(self, pattern: list[tuple[int, int]]) -> None:
+        """Ritmusminta lejátszása: [(csipogás_ms, szünet_ms), ...].
+
+        Fire-and-forget beepek, a ritmust lokális várakozás adja (a beepre nem
+        várunk nyugtát, hogy pontos legyen az időzítés).
+        """
+        for beep_ms, gap_ms in pattern:
+            await self._send(p.CMD_SPEAK_BEEP, p.beep_args(int(beep_ms)), expect_response=False)
+            await asyncio.sleep((beep_ms + gap_ms) / 1000.0)
+
+    async def play_morse(self, text: str, unit_ms: int = 120) -> None:
+        await self.play_rhythm(morse.text_to_rhythm(text, unit_ms))
+
+    async def play_tune(self, name: str) -> None:
+        try:
+            pattern = tunes.RHYTHMS[name]
+        except KeyError as exc:
+            raise ValueError(f"Ismeretlen ritmus: {name!r}. Elérhető: {', '.join(tunes.names())}") from exc
+        await self.play_rhythm(pattern)
 
     async def led_all(self, color: str = "green") -> dict | None:
         return await self._send(p.CMD_LED_SET_COLOR, p.led_all_args(color))

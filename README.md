@@ -63,6 +63,16 @@ szalad le az asztalról.
 .venv/bin/python scripts/test_all.py led drive  # csak LED + mozgás
 ```
 
+## Hang: ritmus és Morse
+
+A hangszóró fix hangmagasságú csipogó (nincs WAV/dallam), de a ritmus vezérelhető:
+
+```bash
+.venv/bin/python scripts/play.py tune shave_haircut   # beépített ritmus
+.venv/bin/python scripts/play.py morse "SOS"          # Morse-kód
+.venv/bin/python scripts/play.py list                 # elérhető ritmusok
+```
+
 ## Unit tesztek (robot nélkül)
 
 ```bash
@@ -74,6 +84,7 @@ szalad le az asztalról.
 | Metódus | Parancs | Megjegyzés |
 |---------|---------|-----------|
 | `beep(ms)` | SpeakBeep | max 10000 ms |
+| `play_rhythm(pattern)` / `play_morse(text)` / `play_tune(name)` | SpeakBeep sorozat | fix hangmagasság → **ritmus**, nem dallam |
 | `led_all(color)` / `led_single(color, idx)` | LedSetColor | színek: white, green, red, blue, cyan, yellow, orange |
 | `drive_speed(l, r)` | DriveSpeed | -100..100 % |
 | `drive_distance(mm, l, r)` | DriveDistance | mm + kerék-sebességek |

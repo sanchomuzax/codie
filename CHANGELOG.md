@@ -2,6 +2,20 @@
 
 A projekt verziózása [semver](https://semver.org/lang/hu/) szerint.
 
+## [0.4.0] — 2026-07-07
+
+### Added — hang: ritmus és Morse
+- `codie/morse.py` — szöveg → Morse-ritmus (szabványos időzítés), tiszta és tesztelt.
+- `codie/tunes.py` — beépített ritmusminták (shave_haircut, beethoven5, heartbeat,
+  tada, alarm, countdown). Fix hangmagasság → ritmus, nem dallam.
+- `CodieClient.play_rhythm()`, `play_morse()`, `play_tune()`.
+- `scripts/play.py` — CLI: morse / tune / beep / list.
+- `tests/test_morse.py` — 7 új unit teszt (összesen 22).
+
+### Megjegyzés
+- A hardver csak fix-frekvenciás csipogó (BLE API v1.0: SpeakBeep, "frequency is fixed").
+  WAV/dallam nincs; a kifejezőeszköz a ritmus (csipogáshossz + szünetek).
+
 ## [0.3.0] — 2026-07-07
 
 ### Verified — teljes funkció-teszt kész
