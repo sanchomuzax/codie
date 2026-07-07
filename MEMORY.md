@@ -48,6 +48,15 @@ Időrendi napló a Codie BLE-vezérlés felélesztéséről. A tartós technikai
   minden parancs `nSuccessful=0`-val nyugtázva. LED-ek lépésenkénti vizuális ellenőrzése a
   0-255 fix után folyamatban.
 
+### Töltés + LED-interferencia megfigyelés
+- Töltőn a firmware saját LED-animációt futtat (körbefutó fehér + töltöttséget jelző piros
+  LED-ek), ami **felülírja a mi LedSetColor parancsunkat** → töltés közben a színteszt nem
+  látható. LED-teszthez le kell venni a töltőről (a robot az oldalán, nem mozdul → biztonságos).
+- Az akku rendben tölt: SoC 5% → 11% → 12% (emelkedik), tehát nem hibás; a piros LED-ek
+  "feltöltődése" a töltöttség-szintet jelzi.
+- `BatteryGetVoltage` (0x106e) ezen a firmware-en **nem ad választ** (SoC 0x1069 viszont igen).
+- Eszköz: `scripts/battery.py` (SoC + voltage trend).
+
 ### Nyitott szálak
 - Szenzorolvasás notify-csatornán (akku `0x1069` lenne az első jó teszt — tényleges adat vissza).
 - LED-vezérlés (`0x1065`) HSV-vel.

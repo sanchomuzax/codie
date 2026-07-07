@@ -47,7 +47,7 @@ CMD_LIGHT = 0x106A            # (szenzor) -> u16 (12 bit, 0=legvilágosabb..4095
 CMD_LINE = 0x106B             # (szenzor) -> left u16, right u16 (12 bit)
 CMD_MIC = 0x106C              # (szenzor) -> u16 (0..~2048)
 CMD_SWITCH_BOOTLOADER = 0x106D  # VESZÉLYES — bootloaderbe vált, ne használd
-CMD_BATTERY_VOLTAGE = 0x106E  # (szenzor) -> u16 (nyers feszültség)
+CMD_BATTERY_VOLTAGE = 0x106E  # (szenzor) -> u16; MEGJEGYZÉS: ezen a firmware-en nincs válasz
 
 # A válaszcsomagban innen kezdődnek az argumentumok:
 # INFO(1)+SEQ(2)+CMD(2)+ARGLEN(2)+REQSEQ(2) = 9
