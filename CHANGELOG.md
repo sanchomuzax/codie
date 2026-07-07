@@ -2,6 +2,18 @@
 
 A projekt verziózása [semver](https://semver.org/lang/hu/) szerint.
 
+## [0.5.0] — 2026-07-07
+
+### Added — mikrofon↔csipogó zárt hurok kísérlet
+- `scripts/mic_beep.py` — a robot a saját beepjét a mikrofonjával "hallja".
+
+### Findings (empirikus)
+- A mic BLE-n **~5 Hz** effektív mintavétellel olvasható (200 ms/olvasás), ~50 ms átlagolással →
+  hangmagasság (frekvencia) mérésére **alkalmatlan** (Nyquist, ~600× túl lassú 3 kHz-hez).
+- Amplitúdó/burkoló viszont jól látszik: beep alatt 456 → 1866; a beep **hossza** is
+  visszamérhető a burkolóból.
+- A mic-lekérdezés **nem szakítja meg** a folyamatban lévő SpeakBeep-et.
+
 ## [0.4.0] — 2026-07-07
 
 ### Added — hang: ritmus és Morse

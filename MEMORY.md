@@ -59,6 +59,17 @@ Időrendi napló a Codie BLE-vezérlés felélesztéséről. A tartós technikai
 - `BatteryGetVoltage` (0x106e) ezen a firmware-en **nem ad választ** (SoC 0x1069 viszont igen).
 - Eszköz: `scripts/battery.py` (SoC + voltage trend).
 
+### Mikrofon-kísérlet: hallja-e a Codie a saját csipogását? (v0.5.0)
+- **Igen — de csak burkológörbeként (hangerő), NEM frekvenciaként.**
+- `MicGetRaw` ~50 ms-re átlagolt amplitúdó, BLE-n lekérdezve; a mért effektív mintavétel
+  **~5 Hz** (200 ms/olvasás) → egy ~3 kHz beephez ~600× túl lassú (Nyquist). Pitch-mérésre
+  alkalmatlan.
+- Beep alatt a mic 456 (alapzaj) → csúcs 1866; a burkoló emelkedett ablaka ~1,4 s, egyezik a
+  1500 ms beep-hosszal → duration visszamérhető.
+- **Váratlan tanulság:** a mic-lekérdezés NEM szakítja meg a folyamatban lévő beepet (a
+  SpeakBeep busy-interrupt nem vonatkozik a szenzorolvasásra). Eszköz: `scripts/mic_beep.py`.
+- Pitch méréséhez: telefonos felvétel + FFT, vagy fizikai teardown (buzzer vs passzív piezo).
+
 ### Nyitott szálak
 - Szenzorolvasás notify-csatornán (akku `0x1069` lenne az első jó teszt — tényleges adat vissza).
 - LED-vezérlés (`0x1065`) HSV-vel.
