@@ -2,6 +2,23 @@
 
 A projekt verziózása [semver](https://semver.org/lang/hu/) szerint.
 
+## [0.7.0] — 2026-07-07
+
+### Added — MCP szerver (Hermes / agent integráció)
+- `codie/mcp_server.py` — a `CodieClient` fölé MCP réteg (FastMCP), 9 magas szintű tool:
+  `status`, `look_ahead`, `drive_forward`, `drive_backward`, `turn`, `stop`, `beep`,
+  `say_morse`, `set_leds`.
+- Tartós BLE-kapcsolat **reconnect-wrapperrel** (`_ensure`): drop után a következő
+  tool-hívás automatikusan újracsatlakozik.
+- Safety-by-design: csak véges, magától megálló mozgásparancsok (nincs nyers folytonos
+  `drive_speed` az agent kezében).
+- `mcp` függőség; README MCP/Hermes szekció; `tests/test_mcp_server.py` (5 teszt, összesen 27).
+
+### Fixed
+- **`turn()` előjel-bug** (egy külső vázlatból): a `drive_turn` foka u16 (előjel nélküli),
+  az irányt a **speed előjele** adja (hivatalos API: pozitív speed = balra). A javított tool
+  a fok abszolútértékét küldi, az irányt a speed előjelével — nincs u16 wraparound.
+
 ## [0.6.0] — 2026-07-07
 
 ### Added — FFT frekvenciaelemzés

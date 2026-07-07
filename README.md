@@ -83,6 +83,36 @@ A csipogó **hangmagassága** telefonos felvételből mérhető (a robot mikrofo
 
 Rendszerfüggőség az FFT-elemzéshez: `ffmpeg` (a felvétel dekódolásához).
 
+## MCP szerver (Hermes / agent integráció)
+
+A `codie/mcp_server.py` a klienst MCP-toolként publikálja, hogy a Hermes Agent (vagy bármely
+MCP-kliens) magas szintű, biztonságos parancsokkal vezérelje a robotot. Tartós BLE-kapcsolat
+reconnect-tel; csak véges, magától megálló mozgásparancsok (nincs runaway).
+
+Futtatás (stdio):
+
+```bash
+CODIE_ADDRESS=DF:74:94:43:36:ED .venv/bin/python -m codie.mcp_server
+```
+
+MCP-kliens config (általános stdio séma — a Hermes v0.17.0 sémájához igazítsd):
+
+```json
+{
+  "mcpServers": {
+    "codie": {
+      "command": "/home/sancho/codie/.venv/bin/python",
+      "args": ["-m", "codie.mcp_server"],
+      "cwd": "/home/sancho/codie",
+      "env": { "CODIE_ADDRESS": "DF:74:94:43:36:ED", "CODIE_ADAPTER": "hci0" }
+    }
+  }
+}
+```
+
+Toolok: `status`, `look_ahead`, `drive_forward(cm)`, `drive_backward(cm)`, `turn(deg)`,
+`stop`, `beep(ms)`, `say_morse(text)`, `set_leds(color)`.
+
 ## Unit tesztek (robot nélkül)
 
 ```bash
