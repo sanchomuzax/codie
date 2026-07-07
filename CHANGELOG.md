@@ -2,6 +2,21 @@
 
 A projekt verziózása [semver](https://semver.org/lang/hu/) szerint.
 
+## [0.7.1] — 2026-07-07
+
+### Added
+- Konkrét **Hermes MCP-config** (README „Hermes bekötés"): `~/.hermes/config.yaml`,
+  `PYTHONPATH`-szal (a Hermes sémában nincs `cwd`), explicit `env` (title-szűrés miatt),
+  `supports_parallel_tool_calls: false`, `timeout`/`connect_timeout: 30`.
+
+### Changed
+- Az MCP szerver lifespan **lustán csatlakozik**: a szerver azonnal indul, az első tool-hívás
+  nyit BLE-kapcsolatot → a tool-felderítés nem vár a ~10-15 mp-es connectre.
+
+### Verified
+- Mozgásirányok élőben igazolva (előre/hátra/jobbra/balra) — a `turn` konvenció és a hátramenet
+  helyes, nincs előjel-fix. `assets/codie.jpg` alkatrész-diagram a README-ben.
+
 ## [0.7.0] — 2026-07-07
 
 ### Added — MCP szerver (Hermes / agent integráció)

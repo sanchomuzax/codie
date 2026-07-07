@@ -54,12 +54,10 @@ async def _ensure() -> CodieClient:
 
 @asynccontextmanager
 async def _lifespan(_server: "FastMCP"):
-    """Induláskor best-effort csatlakozás, leálláskor bontás."""
+    """Lusta csatlakozás: a szerver azonnal indul, az első tool-hívás nyit BLE-kapcsolatot
+    (a ``_ensure`` révén). Így a tool-felderítés nem vár a ~10-15 mp-es BLE connectre.
+    Leálláskor bontunk."""
     global _codie
-    try:
-        await _ensure()
-    except Exception:  # noqa: BLE001 - a toolok úgyis újrapróbálják
-        pass
     try:
         yield
     finally:

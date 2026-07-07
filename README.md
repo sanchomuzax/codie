@@ -122,20 +122,29 @@ Futtatás (stdio):
 CODIE_ADDRESS=DF:74:94:43:36:ED .venv/bin/python -m codie.mcp_server
 ```
 
-MCP-kliens config (általános stdio séma — a Hermes v0.17.0 sémájához igazítsd):
+### Hermes bekötés
 
-```json
-{
-  "mcpServers": {
-    "codie": {
-      "command": "/home/sancho/codie/.venv/bin/python",
-      "args": ["-m", "codie.mcp_server"],
-      "cwd": "/home/sancho/codie",
-      "env": { "CODIE_ADDRESS": "DF:74:94:43:36:ED", "CODIE_ADAPTER": "hci0" }
-    }
-  }
-}
+A Hermes a `~/.hermes/config.yaml` `mcp_servers` kulcsa alatt tartja az MCP-szervereket. Mivel a
+Hermes sémájában **nincs `cwd` mező**, a package elérését `PYTHONPATH`-szal adjuk meg (és a stdio
+szerver csak az explicit `env`-et kapja, ezért a címet is oda tesszük):
+
+```yaml
+mcp_servers:
+  codie:
+    command: "/home/sancho/codie/.venv/bin/python"
+    args: ["-m", "codie.mcp_server"]
+    env:
+      PYTHONPATH: "/home/sancho/codie"
+      CODIE_ADDRESS: "DF:74:94:43:36:ED"
+      CODIE_ADAPTER: "hci0"
+    connect_timeout: 30                   # az első tool-hívás BLE-connectje ~10-15 mp
+    timeout: 30                           # hosszabb say_morse / mozgás miatt
+    supports_parallel_tool_calls: false   # egy BLE-link, egy robot -> soros végrehajtás
 ```
+
+A Hermes a toolokat `mcp_codie_<tool>` néven látja (pl. `mcp_codie_drive_forward`). Config után a
+`/reload-mcp` frissíti a kapcsolatot. A szerver **lustán csatlakozik**: azonnal indul, az első
+tool-hívás nyit BLE-kapcsolatot.
 
 Toolok: `status`, `look_ahead`, `drive_forward(cm)`, `drive_backward(cm)`, `turn(deg)`,
 `stop`, `beep(ms)`, `say_morse(text)`, `set_leds(color)`.

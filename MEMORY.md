@@ -111,8 +111,17 @@ Időrendi napló a Codie BLE-vezérlés felélesztéséről. A tartós technikai
   tetején. Megerősíti: a hangkeltő "Buzzer" (egybevág az FFT-vel), Bluetooth 4.0. A képen extra
   szenzorok is (iránytű, gyorsulásmérő/giroszkóp, enkóder), amiket a BLE API NEM tesz elérhetővé.
 
+### v0.7.1 — Hermes MCP-config + lusta csatlakozás
+- A Hermes doksi alapján (`~/.hermes/config.yaml`, `mcp_servers` kulcs): stdio szerver
+  `command`/`args`/`env`. **Nincs `cwd` mező** → `PYTHONPATH`-szal adjuk meg a package elérését;
+  a stdio szerver csak az explicit `env`-et kapja, ezért a `CODIE_ADDRESS`/`ADAPTER` is oda kerül.
+- Tool-prefix a Hermesben: `mcp_codie_<tool>`. Config után `/reload-mcp`.
+- `supports_parallel_tool_calls: false` (egy BLE-link → soros), `timeout`/`connect_timeout: 30`.
+- Kódfinomítás: a lifespan **lustán csatlakozik** (azonnal indul, első tool-hívás nyit
+  kapcsolatot) → a tool-felderítés nem vár a BLE connectre. Kész config-blokk a README-ben.
+
 ### Nyitott szálak
-- **Hermes MCP-config** a v0.17.0 sémához (a config-formátum a usertől).
+- A kész config-blokk beírása az élő `~/.hermes/config.yaml`-ba (user jóváhagyással) + `/reload-mcp`.
 - Reconnect mid-call retry finomítás (jelenleg a következő hívás csatlakozik újra).
 - Opcionális: `LedStartAnim` (0x1066) animációk; magasabb szintű skillek (vonalkövetés,
   szonár-akadálykerülés); Scratch-blokkos réteg újraélesztése.
