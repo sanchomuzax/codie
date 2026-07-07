@@ -103,10 +103,15 @@ Időrendi napló a Codie BLE-vezérlés felélesztéséről. A tartós technikai
   irány a speed előjeléből (nincs u16 wraparound). +5 MCP smoke teszt (összesen 27).
 - Stdio-ként a Hermes MCP-configjából hivatkozható (README-ben példa).
 
+### Mozgásirányok igazolva (v0.7.0 utáni élő teszt)
+- `scripts/verify_directions.py` lefutott, a user megerősítette: **előre/hátra/jobbra/balra mind
+  helyes.** A negatív keréksebesség = hátramenet, és a `turn` konvenció (pozitív fok = jobbra,
+  azaz negatív speed) is stimmel. **Nincs szükség előjel-javításra a `mcp_server.py`-ban.**
+- A user adott egy feliratozott Codie-alkatrészdiagramot (bayer.hu) → `assets/codie.jpg`, README
+  tetején. Megerősíti: a hangkeltő "Buzzer" (egybevág az FFT-vel), Bluetooth 4.0. A képen extra
+  szenzorok is (iránytű, gyorsulásmérő/giroszkóp, enkóder), amiket a BLE API NEM tesz elérhetővé.
+
 ### Nyitott szálak
-- **Mozgásirány-előjel élő igazolása** (`scripts/verify_directions.py`): hátramenet + `turn`
-  jobbra/balra; ha fordítva, a `mcp_server.py` `_TURN_SPEED`/`_DRIVE_SPEED` előjele igazít.
-  (Robot: oldalán, töltőn.)
 - **Hermes MCP-config** a v0.17.0 sémához (a config-formátum a usertől).
 - Reconnect mid-call retry finomítás (jelenleg a következő hívás csatlakozik újra).
 - Opcionális: `LedStartAnim` (0x1066) animációk; magasabb szintű skillek (vonalkövetés,

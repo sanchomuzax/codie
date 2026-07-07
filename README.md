@@ -1,5 +1,10 @@
 # Codie — BLE vezérlés Raspberry Pi 5-ről
 
+![A Codie robot és alkatrészei](assets/codie.jpg)
+
+*A Codie oktatórobot és szenzorai (kép: bayer.hu). A „Buzzer: voice sign" felirat egybevág az
+FFT-méréssel: fix hangmagasságú csipogó.*
+
 A [csorbazoli/CodieController](https://github.com/csorbazoli/CodieController) 2016-os,
 félbehagyott Java PoC-jából visszafejtett wire-protokoll tiszta Python implementációja.
 A **Codie** oktatórobotot közvetlen Bluetooth Low Energy-n (BlueZ) vezérli — az a láncszem,
