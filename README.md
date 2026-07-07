@@ -73,6 +73,16 @@ A hangszóró fix hangmagasságú csipogó (nincs WAV/dallam), de a ritmus vezé
 .venv/bin/python scripts/play.py list                 # elérhető ritmusok
 ```
 
+A csipogó **hangmagassága** telefonos felvételből mérhető (a robot mikrofonja erre kevés):
+
+```bash
+.venv/bin/python scripts/play.py beep 3000            # hosszú beep a felvételhez
+# ...vedd fel telefonnal, majd:
+.venv/bin/python scripts/fft_pitch.py felvetel.m4a    # domináns frekvencia + felharmonikusok
+```
+
+Rendszerfüggőség az FFT-elemzéshez: `ffmpeg` (a felvétel dekódolásához).
+
 ## Unit tesztek (robot nélkül)
 
 ```bash

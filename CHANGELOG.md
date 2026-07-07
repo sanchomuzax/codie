@@ -2,6 +2,15 @@
 
 A projekt verziózása [semver](https://semver.org/lang/hu/) szerint.
 
+## [0.6.0] — 2026-07-07
+
+### Added — FFT frekvenciaelemzés
+- `scripts/fft_pitch.py` — egy hangfelvételből (bármilyen formátum, ffmpeg-gel dekódolva)
+  kiadja a domináns frekvenciát, a felharmonikusokat és egy óvatos értelmezést
+  (rezonáns buzzer vs passzív elem). A Codie csipogó hangmagasságának méréséhez.
+- `numpy` függőség (FFT). Rendszerfüggőség: `ffmpeg` (dekódolás).
+- Validálva szintetikus szinusz (3000 Hz) és négyszögjel (2700 Hz, páratlan felharmonikusok) ellen.
+
 ## [0.5.0] — 2026-07-07
 
 ### Added — mikrofon↔csipogó zárt hurok kísérlet
