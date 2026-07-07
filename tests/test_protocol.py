@@ -69,10 +69,11 @@ class ArgEncodingTest(unittest.TestCase):
 
 class ColorTest(unittest.TestCase):
     def test_primary_hues(self):
-        self.assertEqual(p.color_hsv("red"), (0, 100, 100))
-        self.assertEqual(p.color_hsv("green"), (33, 100, 100))
-        self.assertEqual(p.color_hsv("blue"), (66, 100, 100))
-        self.assertEqual(p.color_hsv("white"), (0, 0, 100))
+        # Hivatalos Codie BLE API v1.0: HSV 0-255 skálán.
+        self.assertEqual(p.color_hsv("red"), (0, 255, 255))
+        self.assertEqual(p.color_hsv("green"), (85, 255, 255))
+        self.assertEqual(p.color_hsv("blue"), (170, 255, 255))
+        self.assertEqual(p.color_hsv("white"), (0, 0, 255))
 
     def test_unknown_color_raises(self):
         with self.assertRaises(ValueError):

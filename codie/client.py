@@ -139,3 +139,16 @@ class CodieClient:
     async def mic(self) -> int | None:
         r = await self._send(p.CMD_MIC)
         return p.read_u16(r["args"], 0) if r else None
+
+    async def battery_voltage(self) -> int | None:
+        r = await self._send(p.CMD_BATTERY_VOLTAGE)
+        return p.read_u16(r["args"], 0) if r else None
+
+    # --- protokoll-jelzések (hivatalos SDK) ------------------------------
+
+    async def app_connected(self) -> dict | None:
+        """Jelzi az MCU-nak, hogy egy app csatlakozott (a hivatalos app is ezt küldi)."""
+        return await self._send(p.CMD_APP_CONNECTED)
+
+    async def app_disconnected(self) -> dict | None:
+        return await self._send(p.CMD_APP_DISCONNECTED)

@@ -32,6 +32,22 @@ Időrendi napló a Codie BLE-vezérlés felélesztéséről. A tartós technikai
   beleszámolja, a hasznos adat a 9. bájttól — pontosan a Java processResponse szerint.
 - Megjegyzés: az akku a mérésnél 5% volt (töltőn) — a mozgásteszt motorjaira ez kevés lehet.
 
+### v0.2.0 — hivatalos SDK előkerült, protokoll validálva
+- A user talált egy régi SDK-t (`/home/sancho/Downloads/codie.zip`): benne a **hivatalos Codie
+  BLE API v1.0** HTML doksi, `comApi.h`, Qt/C++ példák (Simple + Complex), és maga a
+  **CodieGateway_dotNet.exe** (a 2019-ben "hiányzó" darab!).
+- A visszafejtett protokoll **teljesen igazolt** a `comApi.h` és a HTML ellen: INFO bájt
+  (source<<4 | dest<<6), packet-struktúra (info/seq/cmdId/arglen/data), minden parancs-ID,
+  drive-argumentumok, reply (INFO megfordul, CMD MSB=1, ARGLEN = reply-SEQ + ReARG, nSuccess u8).
+  RX=52af0002 (write w/o response, max 20B), TX=52af0003 (notify).
+- **Feltárt hiba:** a HSV skála 0-255 (nem 0-100, ahogy a Java repo). Javítva; a "piros" előbb
+  fakó volt (0,100,100), most helyes (0,255,255).
+- Új parancsok felvéve: LedStartAnim 0x1066, AppConnected 0x1067, AppDisconnected 0x1068,
+  BatteryGetVoltage 0x106e, SwitchToBootloader 0x106d (veszélyes).
+- **Aktuátorok élőben (v0.1.0 teszt):** beep ✅ (hallható), kerekek pörögtek ✅ (5% akkun is);
+  minden parancs `nSuccessful=0`-val nyugtázva. LED-ek lépésenkénti vizuális ellenőrzése a
+  0-255 fix után folyamatban.
+
 ### Nyitott szálak
 - Szenzorolvasás notify-csatornán (akku `0x1069` lenne az első jó teszt — tényleges adat vissza).
 - LED-vezérlés (`0x1065`) HSV-vel.

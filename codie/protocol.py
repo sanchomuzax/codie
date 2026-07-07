@@ -33,16 +33,21 @@ PRIO_HIGH = 0x08
 
 # --- Parancs-ID-k (CodieCommandType) -------------------------------------
 
-CMD_DRIVE_SPEED = 0x1060     # leftSpeed i8, rightSpeed i8  (%)
-CMD_DRIVE_DISTANCE = 0x1061  # distance u16 (mm), leftSpeed i8, rightSpeed i8
-CMD_DRIVE_TURN = 0x1062      # degree u16, speed i8
-CMD_SONAR = 0x1063           # (szenzor) -> range u16 (mm)
-CMD_SPEAK_BEEP = 0x1064      # duration u16 (ms, max 10000)
-CMD_LED_SET_COLOR = 0x1065   # ledMask u16, hue u8, sat u8, val u8
-CMD_BATTERY = 0x1069         # (szenzor) -> soc u8 (%)
-CMD_LIGHT = 0x106A           # (szenzor) -> u16
-CMD_LINE = 0x106B            # (szenzor) -> left u16, right u16
-CMD_MIC = 0x106C             # (szenzor) -> u16
+CMD_DRIVE_SPEED = 0x1060      # leftSpeed i8, rightSpeed i8  (%)
+CMD_DRIVE_DISTANCE = 0x1061   # distance u16 (mm), leftSpeed i8, rightSpeed i8
+CMD_DRIVE_TURN = 0x1062       # degree u16 (°), speed i8  (+ balra, - jobbra)
+CMD_SONAR = 0x1063            # (szenzor) -> range u16 (mm)
+CMD_SPEAK_BEEP = 0x1064       # duration u16 (ms, max 10000)
+CMD_LED_SET_COLOR = 0x1065    # ledMask u16, hue u8, sat u8, val u8  (HSV 0-255!)
+CMD_LED_START_ANIM = 0x1066   # beépített animáció
+CMD_APP_CONNECTED = 0x1067    # app csatlakozás jelzése az MCU-nak
+CMD_APP_DISCONNECTED = 0x1068  # app leválás jelzése
+CMD_BATTERY = 0x1069          # (szenzor) -> soc u8 (%)
+CMD_LIGHT = 0x106A            # (szenzor) -> u16 (12 bit, 0=legvilágosabb..4095=legsötétebb)
+CMD_LINE = 0x106B             # (szenzor) -> left u16, right u16 (12 bit)
+CMD_MIC = 0x106C              # (szenzor) -> u16 (0..~2048)
+CMD_SWITCH_BOOTLOADER = 0x106D  # VESZÉLYES — bootloaderbe vált, ne használd
+CMD_BATTERY_VOLTAGE = 0x106E  # (szenzor) -> u16 (nyers feszültség)
 
 # A válaszcsomagban innen kezdődnek az argumentumok:
 # INFO(1)+SEQ(2)+CMD(2)+ARGLEN(2)+REQSEQ(2) = 9
@@ -50,8 +55,9 @@ RESPONSE_ARG_POS = 9
 
 MAX_BEEP_MS = 10000
 
-# --- Színek (CodieColors, java.awt.Color) --------------------------------
-# A Java a Color.RGBtoHSB értékeit *100-zal skálázza (0..100), NEM 0..255-tel.
+# --- Színek --------------------------------------------------------------
+# A hivatalos Codie BLE API (v1.0) szerint a hue/sat/val 0-255 tartományban megy.
+# (A Java CodieController tévesen 0-100-zal skálázott — az itt javítva van.)
 
 COLORS_RGB = {
     "white": (255, 255, 255),
@@ -60,18 +66,18 @@ COLORS_RGB = {
     "blue": (0, 0, 255),
     "cyan": (0, 255, 255),
     "yellow": (255, 255, 0),
-    "orange": (255, 200, 0),  # java.awt.Color.ORANGE
+    "orange": (255, 200, 0),
 }
 
 
 def color_hsv(name: str) -> tuple[int, int, int]:
-    """Egy szín HSV értéke 0..100 skálán, a Java CodieColors logikáját tükrözve."""
+    """Egy szín HSV értéke 0..255 skálán (hivatalos Codie BLE API v1.0)."""
     try:
         r, g, b = COLORS_RGB[name]
     except KeyError as exc:
         raise ValueError(f"Ismeretlen szín: {name!r}. Választható: {', '.join(COLORS_RGB)}") from exc
     h, s, v = colorsys.rgb_to_hsv(r / 255.0, g / 255.0, b / 255.0)
-    return int(h * 100), int(s * 100), int(v * 100)
+    return int(h * 255), int(s * 255), int(v * 255)
 
 
 # --- Alacsonyszintű bájt-segédek -----------------------------------------
