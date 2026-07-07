@@ -4,7 +4,7 @@ A csorbazoli/CodieController 2016-os Java PoC-jából visszafejtett wire-protoko
 tiszta Python implementációja, bleak-alapú BLE klienssel.
 """
 
-__version__ = "0.7.1"
+__version__ = "0.8.0"
 
 from .protocol import (  # noqa: F401
     SERVICE_UUID,

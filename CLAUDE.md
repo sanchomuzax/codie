@@ -40,6 +40,8 @@ semver + git tag + GitHub release; a projekt privát repóban: `github.com/sanch
 `fft_pitch.py` (FFT frekvencia), `verify_directions.py` (mozgásirány-igazolás).
 
 **Tesztek (`tests/`):** protokoll + Morse + MCP smoke — 27 unit teszt, robot nélkül futtatható.
+**Hermes skill (`hermes/skills/robotics/codie-robot/SKILL.md`):** playbook az agentnek — mikor/hogyan
+használja a `mcp_codie_*` toolokat (érzékelés, véges mozgás, buktatók, biztonság).
 **Docs:** `docs/comApi.h` (hivatalos header), `CHANGELOG.md`, `VERSION`.
 
 ## Hardver / BLE topológia

@@ -149,6 +149,26 @@ tool-hívás nyit BLE-kapcsolatot.
 Toolok: `status`, `look_ahead`, `drive_forward(cm)`, `drive_backward(cm)`, `turn(deg)`,
 `stop`, `beep(ms)`, `say_morse(text)`, `set_leds(color)`.
 
+### Hermes skill (playbook)
+
+A toolok a „kezek", de az agentnek playbook is kell — ezt adja a
+`hermes/skills/robotics/codie-robot/SKILL.md`: mikor és hogyan használja a robotot (érzékelj
+mozgás előtt, csak véges parancs, töltő↔LED ütközés, fix csipogó, BLE-késleltetés, biztonság).
+A skill `requires_tools`-szal a `mcp_codie_*` toolokhoz kötött — csak akkor bukkan fel, ha a
+szerver be van kötve.
+
+Hogy a Hermes lássa, a `~/.hermes/config.yaml`-ban mutass rá a repó skill-könyvtárára (így
+verziózva marad):
+
+```yaml
+skills:
+  external_dirs:
+    - /home/sancho/codie/hermes/skills
+```
+
+Vagy másold be: `cp -r hermes/skills/robotics ~/.hermes/skills/`. Hívható a `/codie-robot`
+slash-sel is.
+
 ## Unit tesztek (robot nélkül)
 
 ```bash

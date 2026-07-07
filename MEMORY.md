@@ -120,8 +120,20 @@ Időrendi napló a Codie BLE-vezérlés felélesztéséről. A tartós technikai
 - Kódfinomítás: a lifespan **lustán csatlakozik** (azonnal indul, első tool-hívás nyit
   kapcsolatot) → a tool-felderítés nem vár a BLE connectre. Kész config-blokk a README-ben.
 
+### v0.8.0 — Hermes skill (robot-playbook)
+- A Hermes skill-rendszere: `~/.hermes/skills/<kategória>/<skill>/SKILL.md` (agentskills.io-
+  kompatibilis, frontmatter + When to Use / Procedure / Pitfalls / Verification). Feltételes
+  aktiválás: `requires_tools` / `requires_toolsets`. `external_dirs` a config.yaml-ban.
+- Elkészült: `hermes/skills/robotics/codie-robot/SKILL.md` — `requires_tools: [mcp_codie_status,
+  mcp_codie_drive_forward]`, benne a session összes gyakorlati tanulsága (érzékelj mozgás előtt,
+  csak véges parancs, töltő↔LED ütközés, alacsony akku, fix csipogó, BLE-késleltetés+reconnect,
+  fizikai biztonság, turn konvenció: +jobbra/−balra).
+- Betöltés: `external_dirs: [/home/sancho/codie/hermes/skills]` a config.yaml-ban, vagy másolás
+  `~/.hermes/skills/`-be.
+
 ### Nyitott szálak
-- A kész config-blokk beírása az élő `~/.hermes/config.yaml`-ba (user jóváhagyással) + `/reload-mcp`.
+- Beírni az élő `~/.hermes/config.yaml`-ba (user jóváhagyással): a `codie` MCP-szervert **és** a
+  skill `external_dirs`-t, majd `/reload-mcp` + skill-újratöltés.
 - Reconnect mid-call retry finomítás (jelenleg a következő hívás csatlakozik újra).
 - Opcionális: `LedStartAnim` (0x1066) animációk; magasabb szintű skillek (vonalkövetés,
   szonár-akadálykerülés); Scratch-blokkos réteg újraélesztése.

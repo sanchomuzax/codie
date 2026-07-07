@@ -2,6 +2,15 @@
 
 A projekt verziózása [semver](https://semver.org/lang/hu/) szerint.
 
+## [0.8.0] — 2026-07-07
+
+### Added — Hermes skill (robot-playbook)
+- `hermes/skills/robotics/codie-robot/SKILL.md` — agentskills.io-kompatibilis Hermes-skill, ami
+  megtanítja az agentnek, *hogyan* használja a `mcp_codie_*` toolokat: érzékelj mozgás előtt,
+  csak véges parancs, töltő↔LED ütközés, alacsony akku, fix csipogó, BLE-késleltetés+reconnect,
+  fizikai biztonság. `requires_tools`-szal a Codie MCP-toolokhoz kötve.
+- README: skill betöltése `skills.external_dirs`-szel (a repóból, verziózva).
+
 ## [0.7.1] — 2026-07-07
 
 ### Added
