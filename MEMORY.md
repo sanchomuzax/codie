@@ -22,6 +22,16 @@ Időrendi napló a Codie BLE-vezérlés felélesztéséről. A tartós technikai
 - Frame-formátum, parancs-ID-k és a csatlakozási recept rögzítve a CLAUDE.md-ben.
 - Projekt inicializálva `/home/sancho/codie`-ban, privát GitHub repóba mentve.
 
+### v0.1.0 — bleak-kliens + szenzorok élőben igazolva
+- Elkészült a Python package: `codie/protocol.py` (frame encode/decode, parancs-ID-k,
+  szín-HSV) + `codie/client.py` (aszinkron bleak `CodieClient`, notify-feliratkozás,
+  SEQ↔REQSEQ kérés/válasz párosítás). 15 unit teszt zöld (az igazolt beep-frame ellen is).
+- **Szenzorok mind válaszolnak** (notify `52af0003`), a dekódolás bájtra pontos:
+  akku 5%, fény 4041, vonal (3895, 3808), szonár 81 mm, mikrofon 633.
+  Válaszfejléc: INFO=0x10 (MCU→APP), CMD felső bájt 0x80-nal jelölt, ARGLEN a REQSEQ-et is
+  beleszámolja, a hasznos adat a 9. bájttól — pontosan a Java processResponse szerint.
+- Megjegyzés: az akku a mérésnél 5% volt (töltőn) — a mozgásteszt motorjaira ez kevés lehet.
+
 ### Nyitott szálak
 - Szenzorolvasás notify-csatornán (akku `0x1069` lenne az első jó teszt — tényleges adat vissza).
 - LED-vezérlés (`0x1065`) HSV-vel.
