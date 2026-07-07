@@ -2,6 +2,15 @@
 
 A projekt verziózása [semver](https://semver.org/lang/hu/) szerint.
 
+## [0.8.1] — 2026-07-07
+
+### Fixed
+- **Adatvédelem:** eltávolítva a hardkódolt user-home-dir út (`/home/<user>`) a commitolt
+  fájlokból (README, CLAUDE.md, MEMORY.md) — `~` / `/path/to/codie` placeholder helyette.
+- `scripts/fft_pitch.py`: a hardkódolt session-scratchpad út helyett `tempfile.gettempdir()`
+  (a régi út másnál nem létezett → hordozhatatlan volt).
+- CLAUDE.md: a konkrét adapter-MAC eltávolítva (elég a `hci0`).
+
 ## [0.8.0] — 2026-07-07
 
 ### Added — Hermes skill (robot-playbook)

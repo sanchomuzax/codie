@@ -49,7 +49,7 @@ használja a `mcp_codie_*` toolokat (érzékelés, véges mozgás, buktatók, bi
 | Elem | Érték |
 |------|-------|
 | Robot BLE cím | `DF:74:94:43:36:ED` (random address), Name: `Codie` |
-| RPi5 adapter | `hci0` — `88:A2:9E:0C:70:EB` |
+| RPi5 adapter | `hci0` (a beépített BLE adapter) |
 | Vendor service | `52af0001-978a-628d-c845-0a104ca2b8dd` |
 | Write (parancs) char | `52af0002-978a-628d-c845-0a104ca2b8dd` — flags: `write`, `write-without-response` |
 | Notify (válasz/szenzor) char | `52af0003-978a-628d-c845-0a104ca2b8dd` — flags: `notify` |

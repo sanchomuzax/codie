@@ -20,7 +20,7 @@ Időrendi napló a Codie BLE-vezérlés felélesztéséről. A tartós technikai
 - **Élő teszt:** beep-frame (`40 01 00 64 10 02 00 e8 03`) a `52af0002`-re → a Codie **sípolt**,
   ismételten. Determinisztikus, valódi vezérlés. A közvetlen APP→MCU frame-kódolás működik.
 - Frame-formátum, parancs-ID-k és a csatlakozási recept rögzítve a CLAUDE.md-ben.
-- Projekt inicializálva `/home/sancho/codie`-ban, privát GitHub repóba mentve.
+- Projekt inicializálva `~/codie`-ban, privát GitHub repóba mentve.
 
 ### v0.1.0 — bleak-kliens + szenzorok élőben igazolva
 - Elkészült a Python package: `codie/protocol.py` (frame encode/decode, parancs-ID-k,
@@ -33,7 +33,7 @@ Időrendi napló a Codie BLE-vezérlés felélesztéséről. A tartós technikai
 - Megjegyzés: az akku a mérésnél 5% volt (töltőn) — a mozgásteszt motorjaira ez kevés lehet.
 
 ### v0.2.0 — hivatalos SDK előkerült, protokoll validálva
-- A user talált egy régi SDK-t (`/home/sancho/Downloads/codie.zip`): benne a **hivatalos Codie
+- A user talált egy régi SDK-t (`~/Downloads/codie.zip`): benne a **hivatalos Codie
   BLE API v1.0** HTML doksi, `comApi.h`, Qt/C++ példák (Simple + Complex), és maga a
   **CodieGateway_dotNet.exe** (a 2019-ben "hiányzó" darab!).
 - A visszafejtett protokoll **teljesen igazolt** a `comApi.h` és a HTML ellen: INFO bájt
@@ -128,7 +128,7 @@ Időrendi napló a Codie BLE-vezérlés felélesztéséről. A tartós technikai
   mcp_codie_drive_forward]`, benne a session összes gyakorlati tanulsága (érzékelj mozgás előtt,
   csak véges parancs, töltő↔LED ütközés, alacsony akku, fix csipogó, BLE-késleltetés+reconnect,
   fizikai biztonság, turn konvenció: +jobbra/−balra).
-- Betöltés: `external_dirs: [/home/sancho/codie/hermes/skills]` a config.yaml-ban, vagy másolás
+- Betöltés: `external_dirs: [~/codie/hermes/skills]` a config.yaml-ban, vagy másolás
   `~/.hermes/skills/`-be.
 
 ### Nyitott szálak
@@ -141,3 +141,6 @@ Időrendi napló a Codie BLE-vezérlés felélesztéséről. A tartós technikai
 ### Munkamódszer
 - Minden érdemi változásnál frissítendő: `CLAUDE.md` (struktúra/tények), `MEMORY.md` (napló),
   `README.md` (használat) — nem csak a kód és a CHANGELOG. (User kérése, 2026-07-07.)
+- **Soha ne kerüljön user home-dir út / felhasználónév / session-scratchpad út commitolt
+  fájlba** — `~` vagy `/path/to/...` placeholder, kódban `tempfile`. A valódi abszolút út csak a
+  gitignore-olt helyi configba (`.env`, `~/.hermes/config.yaml`). (User kérése, 2026-07-07.)

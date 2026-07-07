@@ -131,16 +131,19 @@ szerver csak az explicit `env`-et kapja, ezért a címet is oda tesszük):
 ```yaml
 mcp_servers:
   codie:
-    command: "/home/sancho/codie/.venv/bin/python"
+    command: "/path/to/codie/.venv/bin/python"
     args: ["-m", "codie.mcp_server"]
     env:
-      PYTHONPATH: "/home/sancho/codie"
+      PYTHONPATH: "/path/to/codie"
       CODIE_ADDRESS: "DF:74:94:43:36:ED"
       CODIE_ADAPTER: "hci0"
     connect_timeout: 30                   # az első tool-hívás BLE-connectje ~10-15 mp
     timeout: 30                           # hosszabb say_morse / mozgás miatt
     supports_parallel_tool_calls: false   # egy BLE-link, egy robot -> soros végrehajtás
 ```
+
+> A `/path/to/codie`-t cseréld a klón tényleges abszolút útjára (ez a helyi
+> `~/.hermes/config.yaml`-ba kerül, ami nincs verziózva).
 
 A Hermes a toolokat `mcp_codie_<tool>` néven látja (pl. `mcp_codie_drive_forward`). Config után a
 `/reload-mcp` frissíti a kapcsolatot. A szerver **lustán csatlakozik**: azonnal indul, az első
@@ -163,7 +166,7 @@ verziózva marad):
 ```yaml
 skills:
   external_dirs:
-    - /home/sancho/codie/hermes/skills
+    - /path/to/codie/hermes/skills
 ```
 
 Vagy másold be: `cp -r hermes/skills/robotics ~/.hermes/skills/`. Hívható a `/codie-robot`

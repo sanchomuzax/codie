@@ -15,19 +15,18 @@ from __future__ import annotations
 
 import subprocess
 import sys
+import tempfile
 import wave
 from pathlib import Path
 
 import numpy as np
 
-SCRATCH = Path("/tmp/claude-1000/-home-sancho/b8e9b0f3-2285-4e7e-8245-dc71817e00a4/scratchpad")
 MIN_FREQ = 150.0  # ez alatt (DC, hálózati brum) nem keresünk csúcsot
 
 
 def load_mono(path: Path, target_sr: int = 44100) -> tuple[np.ndarray, int]:
     """Bármilyen hangfájl -> (mono float minták, mintavétel). ffmpeg-gel konvertál."""
-    tmp = SCRATCH / "fft_input.wav"
-    SCRATCH.mkdir(parents=True, exist_ok=True)
+    tmp = Path(tempfile.gettempdir()) / "codie_fft_input.wav"
     subprocess.run(
         ["ffmpeg", "-y", "-i", str(path), "-ac", "1", "-ar", str(target_sr), "-f", "wav", str(tmp)],
         check=True, capture_output=True,
