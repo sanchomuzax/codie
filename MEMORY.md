@@ -44,9 +44,11 @@ Időrendi napló a Codie BLE-vezérlés felélesztéséről. A tartós technikai
   fakó volt (0,100,100), most helyes (0,255,255).
 - Új parancsok felvéve: LedStartAnim 0x1066, AppConnected 0x1067, AppDisconnected 0x1068,
   BatteryGetVoltage 0x106e, SwitchToBootloader 0x106d (veszélyes).
-- **Aktuátorok élőben (v0.1.0 teszt):** beep ✅ (hallható), kerekek pörögtek ✅ (5% akkun is);
-  minden parancs `nSuccessful=0`-val nyugtázva. LED-ek lépésenkénti vizuális ellenőrzése a
-  0-255 fix után folyamatban.
+- **Aktuátorok élőben:** beep ✅ (hallható), kerekek pörögtek ✅ (5% akkun is);
+  minden parancs `nSuccessful=0`-val nyugtázva.
+- **LED vizuálisan igazolva (töltőről levéve):** a 0-255 HSV-fix után erős fény, helyes
+  színkör (piros→zöld→kék→sárga→cián→narancs→fehér, a zöld valódi zöld), egyesével körbefutás
+  is jó. A `led_sweep.py`-vel futtatva. → **A teljes funkció-teszt kész, minden funkció él.**
 
 ### Töltés + LED-interferencia megfigyelés
 - Töltőn a firmware saját LED-animációt futtat (körbefutó fehér + töltöttséget jelző piros

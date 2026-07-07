@@ -2,6 +2,18 @@
 
 A projekt verziózása [semver](https://semver.org/lang/hu/) szerint.
 
+## [0.3.0] — 2026-07-07
+
+### Verified — teljes funkció-teszt kész
+- **Minden funkció élőben igazolva:** szenzorok (akku/fény/vonal/szonár/mikrofon),
+  SpeakBeep (hallható), mozgás (DriveSpeed/Distance/Turn — kerekek pörögtek),
+  LedSetColor (vizuálisan: erős fény, helyes színkör, a 0-255 HSV-fix bizonyítva).
+- Minden parancsot a robot `nSuccessful=0`-val nyugtázott.
+
+### Added
+- `scripts/led_sweep.py` — lassú szín-szekvencia vizuális ellenőrzéshez.
+- README: teszt-eredmény összefoglaló táblázat.
+
 ## [0.2.0] — 2026-07-07
 
 ### Validated

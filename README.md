@@ -8,6 +8,18 @@ ami 2019-ben hiányzott (PC-oldali BLE út), Linuxon triviális.
 A protokoll- és hardverrészletek a [CLAUDE.md](CLAUDE.md)-ben; a fejlődési napló a
 [MEMORY.md](MEMORY.md)-ben.
 
+## Teszt eredmények (2026-07-07 — minden funkció élőben igazolva)
+
+| Kategória | Funkció | Állapot |
+|-----------|---------|---------|
+| Szenzor | akku (SoC), fény, vonal, szonár, mikrofon | ✅ objektív adat, bájtra pontos dekódolás |
+| Hang | SpeakBeep | ✅ hallható |
+| Mozgás | DriveSpeed, DriveDistance, DriveTurn | ✅ kerekek pörögtek (alacsony akkun is) |
+| Fény | LedSetColor (mind a 12 + egyesével) | ✅ vizuálisan igazolt, helyes színek, erős fény |
+
+Minden parancsot a robot `nSuccessful=0`-val nyugtázott. A protokollt a hivatalos
+Codie BLE API v1.0 (`docs/comApi.h`) teljesen igazolta.
+
 ## Telepítés
 
 ```bash
