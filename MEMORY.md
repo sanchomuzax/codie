@@ -59,6 +59,16 @@ Időrendi napló a Codie BLE-vezérlés felélesztéséről. A tartós technikai
 - `BatteryGetVoltage` (0x106e) ezen a firmware-en **nem ad választ** (SoC 0x1069 viszont igen).
 - Eszköz: `scripts/battery.py` (SoC + voltage trend).
 
+### v0.3.0 — teljes funkció-teszt kész (mérföldkő)
+- Minden funkció élőben igazolva: szenzorok (adat), SpeakBeep (hang), mozgás (kerekek),
+  LedSetColor (vizuálisan, helyes színek). Minden parancs nSuccess=0. README teszt-táblázat.
+
+### v0.4.0 — hang: ritmus és Morse
+- `codie/morse.py` (szöveg → Morse-ritmus, szabványos időzítés) + `codie/tunes.py` (beépített
+  ritmusok: shave_haircut, beethoven5, heartbeat, tada, alarm, countdown).
+- `CodieClient.play_rhythm` / `play_morse` / `play_tune`; `scripts/play.py` CLI. +7 unit teszt.
+- Korlát: fix hangmagasság (BLE API: SpeakBeep), WAV/dallam nincs — a kifejezőeszköz a ritmus.
+
 ### Mikrofon-kísérlet: hallja-e a Codie a saját csipogását? (v0.5.0)
 - **Igen — de csak burkológörbeként (hangerő), NEM frekvenciaként.**
 - `MicGetRaw` ~50 ms-re átlagolt amplitúdó, BLE-n lekérdezve; a mért effektív mintavétel
@@ -82,8 +92,26 @@ Időrendi napló a Codie BLE-vezérlés felélesztéséről. A tartós technikai
 - Fenntartás: telefonmikrofon elnyomhatja a magas felharmonikusokat; 100%-os válasz a fizikai
   teardown / szkóp a buzzer lábán. De az alaphang és a hiányzó 3. felharmonikus robusztus jel.
 
+### v0.7.0 — MCP szerver (Hermes / agent integráció)
+- Egy külső Claude-beszélgetés terve alapján (ROS-mentes "Opció 1": bleak driver → MCP → Hermes;
+  a Butter-Bench elv: az LLM magas szintű akciót válasszon, ne legyen a szoros motor-loopban).
+- `codie/mcp_server.py`: FastMCP réteg, 9 magas szintű tool (status, look_ahead, drive_forward,
+  drive_backward, turn, stop, beep, say_morse, set_leds). Tartós BLE-kapcsolat **reconnect-
+  wrapperrel** (`_ensure`); csak véges, magától megálló mozgásparancsok (nincs runaway).
+- **Fix:** a beillesztett vázlat `turn()` előjel-bugja — a `drive_turn` foka u16 (előjel nélküli),
+  az irányt a **speed előjele** adja (API: pozitív speed = balra). Javítva: fok = abszolútérték,
+  irány a speed előjeléből (nincs u16 wraparound). +5 MCP smoke teszt (összesen 27).
+- Stdio-ként a Hermes MCP-configjából hivatkozható (README-ben példa).
+
 ### Nyitott szálak
-- Szenzorolvasás notify-csatornán (akku `0x1069` lenne az első jó teszt — tényleges adat vissza).
-- LED-vezérlés (`0x1065`) HSV-vel.
-- Python/BlueZ wrapper a bluetoothctl-heredoc kiváltására.
-- Mozgás CSAK töltőről levéve, külön jóváhagyással.
+- **Mozgásirány-előjel élő igazolása** (`scripts/verify_directions.py`): hátramenet + `turn`
+  jobbra/balra; ha fordítva, a `mcp_server.py` `_TURN_SPEED`/`_DRIVE_SPEED` előjele igazít.
+  (Robot: oldalán, töltőn.)
+- **Hermes MCP-config** a v0.17.0 sémához (a config-formátum a usertől).
+- Reconnect mid-call retry finomítás (jelenleg a következő hívás csatlakozik újra).
+- Opcionális: `LedStartAnim` (0x1066) animációk; magasabb szintű skillek (vonalkövetés,
+  szonár-akadálykerülés); Scratch-blokkos réteg újraélesztése.
+
+### Munkamódszer
+- Minden érdemi változásnál frissítendő: `CLAUDE.md` (struktúra/tények), `MEMORY.md` (napló),
+  `README.md` (használat) — nem csak a kód és a CHANGELOG. (User kérése, 2026-07-07.)

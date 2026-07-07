@@ -21,6 +21,27 @@ fogadott és végrehajtott parancsot (SpeakBeep) — ismételhetően igazolva. K
 **hivatalos Codie BLE API v1.0** dokumentáció + `comApi.h` (lásd `docs/comApi.h`), amely a
 visszafejtett protokollt teljesen igazolta (egy hibát is feltárt: a HSV 0-255, nem 0-100).
 
+**Jelenlegi állapot (v0.7.0):** működő Python package (`CodieClient`), minden funkció élőben
+igazolva (szenzorok, hang, mozgás, LED), hang/ritmus/Morse réteg, FFT-alapú frekvenciamérés
+(a csipogó ~2483 Hz-es önrezgő buzzer), és egy MCP szerver a Hermes-integrációhoz. A verziózás
+semver + git tag + GitHub release; a projekt privát repóban: `github.com/sanchomuzax/codie`.
+
+## Projekt struktúra
+
+**Python package (`codie/`):**
+- `protocol.py` — wire-protokoll: frame encode/decode, parancs-ID-k, szín-HSV (0-255). Függőségmentes, unit-tesztelt.
+- `client.py` — `CodieClient`: aszinkron bleak kliens, notify-feliratkozás, SEQ↔REQSEQ kérés/válasz párosítás; aktuátor- és szenzormetódusok + hang (`play_rhythm`/`play_morse`/`play_tune`).
+- `morse.py` — szöveg → Morse-ritmus (szabványos időzítés).
+- `tunes.py` — beépített ritmusminták (fix hangmagasság → ritmus, nem dallam).
+- `mcp_server.py` — FastMCP réteg a Hermes/agent integrációhoz (9 tool, reconnect-wrapper, csak véges mozgásparancsok).
+
+**Szkriptek (`scripts/`):** `test_all.py` (teljes teszt), `led.py` / `led_sweep.py` (LED),
+`battery.py` (akku trend), `mic_beep.py` (mic hallja a beepet), `play.py` (ritmus/Morse/beep CLI),
+`fft_pitch.py` (FFT frekvencia), `verify_directions.py` (mozgásirány-igazolás).
+
+**Tesztek (`tests/`):** protokoll + Morse + MCP smoke — 27 unit teszt, robot nélkül futtatható.
+**Docs:** `docs/comApi.h` (hivatalos header), `CHANGELOG.md`, `VERSION`.
+
 ## Hardver / BLE topológia
 
 | Elem | Érték |
@@ -123,9 +144,19 @@ a konkrét BlueZ felderítéskor rögzült; connect után `menu gatt` → `list-
 - Sípolás és LED biztonságos, mozgásmentes — életjel-próbához ezek valók.
 - Minden fizikai actuálás (kiváltképp mozgás) előtt rákérdezni a felhasználónál.
 
-## Következő lépések
+## Hang / csipogó
 
-- LED-vezérlés (`0x1065`) — HSV a repo `CodieColors` enumjából
-- Szenzorolvasás a notify-csatornán: akku (`0x1069`), fény, vonal, szonár, mikrofon
-- Vékony Python/BlueZ (bleak vagy dbus) wrapper a bluetoothctl-heredoc helyett
-- Esetleg a Scratch-blokkos réteg újraélesztése a working BLE-backenddel
+A `SpeakBeep` (0x1064) az egyetlen hang-parancs, csak `duration` (a frekvencia fix). FFT-mérés
+szerint a hangkeltő valószínűleg **önrezgő piezo-buzzer ~2483 Hz-en** — a hangmagasság
+hardveresen fix, firmware-hackkel sem módosítható. A kifejezőeszköz a **ritmus** (hossz +
+szünetek): `play_rhythm`, `play_morse`, `play_tune`.
+
+## Következő lépések / nyitott
+
+- **Mozgásirány-előjel élő igazolása** (`scripts/verify_directions.py`): hátramenet + `turn`
+  jobbra/balra. Ha fordítva, a `mcp_server.py` `_TURN_SPEED` / `_DRIVE_SPEED` előjele igazít.
+- **Hermes MCP-config** a v0.17.0 sémához (stdio; általános séma a README-ben).
+- Reconnect finomítás: jelenleg a *következő* tool-hívás csatlakozik újra drop után; a mid-call
+  retry lehet a következő lépés.
+- Opcionális: `LedStartAnim` (0x1066) beépített animációk; magasabb szintű skillek (vonalkövetés
+  a `line()`-nal, szonár-akadálykerülés), vagy a Scratch-blokkos réteg újraélesztése.

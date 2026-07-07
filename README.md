@@ -6,7 +6,29 @@ A **Codie** oktatórobotot közvetlen Bluetooth Low Energy-n (BlueZ) vezérli �
 ami 2019-ben hiányzott (PC-oldali BLE út), Linuxon triviális.
 
 A protokoll- és hardverrészletek a [CLAUDE.md](CLAUDE.md)-ben; a fejlődési napló a
-[MEMORY.md](MEMORY.md)-ben.
+[MEMORY.md](MEMORY.md)-ben; a verziónkénti változások a [CHANGELOG.md](CHANGELOG.md)-ben.
+Aktuális verzió: **v0.7.0** (MCP szerver a Hermes-integrációhoz).
+
+## Projekt struktúra
+
+```
+codie/            Python package
+  protocol.py     wire-protokoll (frame encode/decode, parancs-ID-k, szín-HSV 0-255)
+  client.py       CodieClient — aszinkron bleak kliens (aktuátor/szenzor/hang)
+  morse.py        szöveg → Morse-ritmus
+  tunes.py        beépített ritmusminták
+  mcp_server.py   FastMCP réteg a Hermes/agent integrációhoz (9 tool)
+scripts/
+  test_all.py         teljes funkció-teszt (sensors|beep|led|drive)
+  led.py, led_sweep.py  LED-tesztek
+  battery.py          akku SoC + feszültség trend
+  mic_beep.py         a robot hallja a saját beepjét (burkoló)
+  play.py             ritmus / Morse / beep CLI
+  fft_pitch.py        hangfelvétel domináns frekvenciája (FFT)
+  verify_directions.py  mozgásirányok élő igazolása
+tests/            protokoll + Morse + MCP smoke (27 unit teszt)
+docs/comApi.h     hivatalos Codie BLE API header (referencia)
+```
 
 ## Teszt eredmények (2026-07-07 — minden funkció élőben igazolva)
 
