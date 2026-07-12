@@ -167,8 +167,12 @@ Időrendi napló a Codie BLE-vezérlés felélesztéséről. A tartós technikai
 - **Beep frekvenciával (!):** a `codiejs beep(volume, frequency, duration)` a régi (routing nélküli)
   változaton **u16 frekvenciát is küldött** (cmd 0x0006) → az a hardver változtatható hangmagasságú
   (passzív hangszóró) volt. A MI robotunk viszont routingos, `SpeakBeep 0x1064` CSAK duration
-  (fix ~2483 Hz buzzer az FFT szerint). Külön hardver-generáció. Ötlet: a mi SpeakBeep-ünket egy
-  extra frekvencia-arggal (ARGLEN=4) kipróbálni — szinte biztos no-op, de egy beep, perdöntő.
+  (fix ~2483 Hz buzzer az FFT szerint). Külön hardver-generáció.
+- **Frekvencia-kísérlet kísérletileg lezárva (2026-07-07):** a mi `SpeakBeep`-ünk extra
+  frekvencia-arggal (ARGLEN=4, mindkét bájtsorrend: dur+freq és freq+dur, 300/1000/4000 Hz) —
+  **mind ~2 kHz-en szólt**, a firmware a frekvencia-argot figyelmen kívül hagyja. Fix buzzer,
+  nincs rejtett frekvencia-vezérlés. Mellékesen: a beepek megszólaltak `ack=None` mellett is →
+  a **write-út működött, csak a notify/reply-út akadozott** a gyenge linken (ack=None ≠ nem futott le).
 
 ### Munkamódszer
 - Minden érdemi változásnál frissítendő: `CLAUDE.md` (struktúra/tények), `MEMORY.md` (napló),
