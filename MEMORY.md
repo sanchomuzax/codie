@@ -152,7 +152,7 @@ Időrendi napló a Codie BLE-vezérlés felélesztéséről. A tartós technikai
 - Opcionális: `LedStartAnim` (0x1066) animációk; magasabb szintű skillek (vonalkövetés,
   szonár-akadálykerülés); Scratch-blokkos réteg újraélesztése.
 
-### Kapcsolódó munkák / referenciák (zbettenbuk, 2016-11, Node.js)
+### Kapcsolódó munkák / referenciák
 - **`zbettenbuk/codiejs`** (noble, AGPL) — a Codie BLE-drivere JS-ben (≈ a mi `CodieClient`-ünk).
   **`zbettenbuk/codie-server`** — HTTP-szerver fölötte, ScratchX-integrációval
   (`scratchx.org/?url=zbettenbuk.github.io/codie.js`). Valószínűleg EZ a csorbazoli által 2019-ben
@@ -173,6 +173,16 @@ Időrendi napló a Codie BLE-vezérlés felélesztéséről. A tartós technikai
   **mind ~2 kHz-en szólt**, a firmware a frekvencia-argot figyelmen kívül hagyja. Fix buzzer,
   nincs rejtett frekvencia-vezérlés. Mellékesen: a beepek megszólaltak `ack=None` mellett is →
   a **write-út működött, csak a notify/reply-út akadozott** a gyenge linken (ack=None ≠ nem futott le).
+
+**Ugyanaz a generáció, modern (2025) — független megerősítés:**
+- **`pipacsba/CodieController`** — a `csorbazoli/CodieController` **forkja** (az eredeti; nincs új tartalom).
+- **`pipacsba/codie_bluetooth_controller`** (2025-02) — **ESPHome / Home Assistant** BLE-vezérlő.
+  **UGYANAZ a protokoll-generáció, mint a mienk:** service `52AF0001`, rx `52af0002`, tx `52af0003`;
+  parancs-ID-k 0x1060/0x1064/0x1065/0x1069; routingos frame (INFO 0x40). Forrás: a forkolt Java-repo +
+  a hivatalos `Codie BLE API v1.0.pdf`. Szenzor: battery + sonar; **giroszkó itt SINCS** (3. független
+  megerősítés). Platform: ESP32/HA (a mienk Pi5/Python/MCP) — kész referencia Home Assistant-integrációhoz.
+- **KÉT Codie-generáció, most behatárolva:** routingos (comApi.h v1.0) = **a mi robotunk = pipacsba**
+  (52af UUID-k, fix buzzer) vs routing nélküli = zbettenbuk/codiejs (más UUID-k, frekvenciás beep).
 
 ### Munkamódszer
 - Minden érdemi változásnál frissítendő: `CLAUDE.md` (struktúra/tények), `MEMORY.md` (napló),
