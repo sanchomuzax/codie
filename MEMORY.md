@@ -184,6 +184,17 @@ Időrendi napló a Codie BLE-vezérlés felélesztéséről. A tartós technikai
 - **KÉT Codie-generáció, most behatárolva:** routingos (comApi.h v1.0) = **a mi robotunk = pipacsba**
   (52af UUID-k, fix buzzer) vs routing nélküli = zbettenbuk/codiejs (más UUID-k, frekvenciás beep).
 
+**Forkok átnézve (2026-07-07, Sonnet-subagentekkel) — nincs hasznos módosítás:**
+- Az összes eddigi repo forkja. Csak kettőnek van saját commitja, mindkettő `GyroLand`-tól
+  (= **Gyarmati Roland**, a szerző neve — NEM giroszkóp, vörös hering).
+- `pipacsba/CodieController`: identical, nulla módosítás.
+- `GyroLand/codie-server` (+2): személyes dev-fork (npm-maradék, route-ok törölve) — semmi hasznos.
+- `GyroLand/codiejs` (+2): a régi (routing nélküli) codiejs-t átírja az ÚJ routingos protokollra
+  (52af UUID-k, 0x1060–0x106c, 7 bájtos frame) → **4. független megerősítés a mi protokollunkra**,
+  de NINCS új parancs/szenzor, és **giroszkóp itt sem**. Történeti nyom: README-je hivatkozik a
+  `http://codie.azurewebsites.net/api/` spec-URL-re (valószínűleg halott; web.archive-ban nézhető).
+- **Összegzés:** egyik fork sem hoz átemelendő módosítást, és egyik sem exponálja az IMU-t.
+
 ### Munkamódszer
 - Minden érdemi változásnál frissítendő: `CLAUDE.md` (struktúra/tények), `MEMORY.md` (napló),
   `README.md` (használat) — nem csak a kód és a CHANGELOG. (User kérése, 2026-07-07.)
