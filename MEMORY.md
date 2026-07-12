@@ -192,7 +192,8 @@ Időrendi napló a Codie BLE-vezérlés felélesztéséről. A tartós technikai
 - `GyroLand/codiejs` (+2): a régi (routing nélküli) codiejs-t átírja az ÚJ routingos protokollra
   (52af UUID-k, 0x1060–0x106c, 7 bájtos frame) → **4. független megerősítés a mi protokollunkra**,
   de NINCS új parancs/szenzor, és **giroszkóp itt sem**. Történeti nyom: README-je hivatkozik a
-  `http://codie.azurewebsites.net/api/` spec-URL-re (valószínűleg halott; web.archive-ban nézhető).
+  `http://codie.azurewebsites.net/api/` spec-URL-re — **Web Archive-ban ELLENŐRIZVE (2026-07-07):
+  üres lap, semmi hasznos. Lezárt szál, ne kutasd újra.**
 - **Összegzés:** egyik fork sem hoz átemelendő módosítást, és egyik sem exponálja az IMU-t.
 
 ### Munkamódszer
