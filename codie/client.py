@@ -9,17 +9,26 @@ from __future__ import annotations
 
 import asyncio
 
-from bleak import BleakClient
+from bleak import BleakClient, BleakScanner
 
 from . import morse, protocol as p
 from . import tunes
 
 
 class CodieClient:
-    def __init__(self, address: str, adapter: str = "hci0", timeout: float = 15.0):
+    def __init__(
+        self,
+        address: str,
+        adapter: str = "hci0",
+        timeout: float = 15.0,
+        connect_retries: int = 3,
+        retry_delay: float = 3.0,
+    ):
         self.address = address
         self.adapter = adapter
         self._connect_timeout = timeout
+        self._connect_retries = max(1, connect_retries)
+        self._retry_delay = retry_delay
         self._client: BleakClient | None = None
         self._pending: dict[int, asyncio.Future] = {}
         self.notifications: list[tuple[bytes, dict | None]] = []
@@ -34,12 +43,52 @@ class CodieClient:
         await self.disconnect()
 
     async def connect(self) -> None:
+        """Csatlakozás retry-jal + felébresztő scannel.
+
+        A Codie egy idő után elalszik; ilyenkor az első connect timeoutol. Egy BLE-scan
+        felébreszti / újrafelfedezteti a BlueZ-vel, majd újrapróbáljuk — így egy elalvás nem
+        bukik el tévedésből (fontos éles Hermes-használatnál).
+        """
+        last_exc: Exception | None = None
+        for attempt in range(1, self._connect_retries + 1):
+            try:
+                await self._connect_once()
+                return
+            except Exception as exc:  # noqa: BLE001 - TimeoutError / BleakError stb.
+                last_exc = exc
+                await self._cleanup_partial()
+                if attempt < self._connect_retries:
+                    await self._scan_wake()
+                    await asyncio.sleep(self._retry_delay)
+        assert last_exc is not None
+        raise last_exc
+
+    async def _connect_once(self) -> None:
         kwargs = {"timeout": self._connect_timeout}
         if self.adapter:
             kwargs["adapter"] = self.adapter
-        self._client = BleakClient(self.address, **kwargs)
-        await self._client.connect()
-        await self._client.start_notify(p.NOTIFY_UUID, self._on_notify)
+        client = BleakClient(self.address, **kwargs)
+        await client.connect()
+        await client.start_notify(p.NOTIFY_UUID, self._on_notify)
+        self._client = client
+
+    async def _scan_wake(self) -> None:
+        """Best-effort felébresztő/discovery scan a sikertelen connect után."""
+        try:
+            kwargs = {"timeout": 6.0}
+            if self.adapter:
+                kwargs["adapter"] = self.adapter
+            await BleakScanner.discover(**kwargs)
+        except Exception:  # noqa: BLE001 - a scan best-effort, a lényeg a retry
+            pass
+
+    async def _cleanup_partial(self) -> None:
+        if self._client is not None:
+            try:
+                await self._client.disconnect()
+            except Exception:  # noqa: BLE001
+                pass
+            self._client = None
 
     async def disconnect(self) -> None:
         if self._client is not None:

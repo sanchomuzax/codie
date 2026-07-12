@@ -157,8 +157,9 @@ szünetek): `play_rhythm`, `play_morse`, `play_tune`.
 
 - **Mozgásirány-előjel élő igazolása** (`scripts/verify_directions.py`): hátramenet + `turn`
   jobbra/balra. Ha fordítva, a `mcp_server.py` `_TURN_SPEED` / `_DRIVE_SPEED` előjele igazít.
-- Reconnect finomítás: jelenleg a *következő* tool-hívás csatlakozik újra drop után; a mid-call
-  retry lehet a következő lépés.
+- Robusztus connect (v0.9.0): a `CodieClient.connect` retry-jal + felébresztő BLE-scannel próbál
+  (a Codie elalszik → első connect timeoutolhat). Így egy elalvás nem bukik el tévedésből. A
+  mid-call (hívás közbeni) retry lehet a következő finomítás.
 - Hermes MCP-config kész (README „Hermes bekötés"): `~/.hermes/config.yaml`, `PYTHONPATH`-szal
   (nincs `cwd` mező a Hermes sémában). A szerver lustán csatlakozik. Nyitott: beírni az élő
   `~/.hermes/config.yaml`-ba (a user jóváhagyásával) + `/reload-mcp`.

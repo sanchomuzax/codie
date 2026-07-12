@@ -11,7 +11,7 @@ ami 2019-ben hiányzott (PC-oldali BLE út), Linuxon triviális.
 
 A protokoll- és hardverrészletek a [CLAUDE.md](CLAUDE.md)-ben; a fejlődési napló a
 [MEMORY.md](MEMORY.md)-ben; a verziónkénti változások a [CHANGELOG.md](CHANGELOG.md)-ben.
-Aktuális verzió: **v0.7.0** (MCP szerver a Hermes-integrációhoz).
+Aktuális verzió: **v0.9.0** (MCP szerver a Hermes-integrációhoz + robusztus, elalvás-tűrő connect).
 
 ## Projekt struktúra
 

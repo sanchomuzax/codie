@@ -2,6 +2,15 @@
 
 A projekt verziózása [semver](https://semver.org/lang/hu/) szerint.
 
+## [0.9.0] — 2026-07-07
+
+### Added — robusztus connect (elalvás-tűrő)
+- `CodieClient.connect` most **retry-jal + felébresztő BLE-scannel** próbál (`connect_retries`,
+  `retry_delay` paraméterek): a Codie egy idő után elalszik, ilyenkor az első connect timeoutol,
+  de egy `BleakScanner.discover` felébreszti és a következő próba sikerül. Így az `_ensure`
+  reconnect és a Hermes-használat sem bukik el tévedésből.
+- +3 unit teszt (`tests/test_client_retry.py`), összesen 30.
+
 ## [0.8.1] — 2026-07-07
 
 ### Fixed

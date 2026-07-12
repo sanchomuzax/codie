@@ -131,6 +131,20 @@ Időrendi napló a Codie BLE-vezérlés felélesztéséről. A tartós technikai
 - Betöltés: `external_dirs: [~/codie/hermes/skills]` a config.yaml-ban, vagy másolás
   `~/.hermes/skills/`-be.
 
+### v0.9.0 — robusztus connect (elalvás-tűrő)
+- Élő tapasztalat: a Codie egy idő után **elalszik**, ilyenkor az első `connect` timeoutol; egy
+  **BLE-scan felébreszti**, és a második próba sikerül (4× körbefordulás teszt közben derült ki).
+- Beépítve a `CodieClient.connect`-be: **retry (alap 3×) + felébresztő `BleakScanner.discover`**
+  a próbák között (`connect_retries`, `retry_delay` paraméterek). Így az `_ensure` reconnect és a
+  Hermes-használat sem bukik el tévedésből egy elalvás miatt. +3 unit teszt (összesen 30).
+- Megjegyzés: ha „connected=True", de a szenzorok `None`-t adnak, az jellemzően **gyenge/távoli
+  link** (a robot messze van), nem lemerült akku — vidd közelebb.
+
+### Giroszkóp / IMU BLE-n?
+- **Nem elérhető.** A hardverben megvan (gyorsulásmérő+giroszkóp, iránytű, enkóderek — lásd a
+  diagram), de a hivatalos `comApi.h` parancskészlet NEM exponálja. BLE-n olvasható szenzorok:
+  sonar, light, line, mic, battery (SoC). Csak módosított MCU-firmware-rel lenne elérhető.
+
 ### Nyitott szálak
 - Beírni az élő `~/.hermes/config.yaml`-ba (user jóváhagyással): a `codie` MCP-szervert **és** a
   skill `external_dirs`-t, majd `/reload-mcp` + skill-újratöltés.
