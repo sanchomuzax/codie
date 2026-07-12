@@ -152,6 +152,24 @@ Időrendi napló a Codie BLE-vezérlés felélesztéséről. A tartós technikai
 - Opcionális: `LedStartAnim` (0x1066) animációk; magasabb szintű skillek (vonalkövetés,
   szonár-akadálykerülés); Scratch-blokkos réteg újraélesztése.
 
+### Kapcsolódó munkák / referenciák (zbettenbuk, 2016-11, Node.js)
+- **`zbettenbuk/codiejs`** (noble, AGPL) — a Codie BLE-drivere JS-ben (≈ a mi `CodieClient`-ünk).
+  **`zbettenbuk/codie-server`** — HTTP-szerver fölötte, ScratchX-integrációval
+  (`scratchx.org/?url=zbettenbuk.github.io/codie.js`). Valószínűleg EZ a csorbazoli által 2019-ben
+  "már nem elérhető"-ként említett hivatalos Scratch-kiegészítő. (≈ a mi MCP-szerverünk rokona.)
+- **Másik protokoll-generáció — routing NÉLKÜL:** eltérő service/char UUID-k (service
+  `d46e7e53...`, 4 karakterisztika: request/action + reply-párjaik), a frame INFO bájt nélkül
+  (rögtön seq+cmd). Parancsok: move 0x0001, motorBoth 0x0002, motorLeft/Right 0x0003/4,
+  turn 0x0005, beep 0x0006, setColor 0x0008, setAnimation 0x0009. Szenzorok: distance 0x0001,
+  battery 0x0002, sound 0x0003, light 0x0004, line 0x0005. HSV-skálázás is más (hue×0.7, sat/val×2.55).
+- **Giroszkóp itt SINCS** — a szenzorlista csak distance/battery/sound/light/line. Egyik ismert
+  BLE-protokoll sem exponálja az IMU-t (gyro/accel/compass).
+- **Beep frekvenciával (!):** a `codiejs beep(volume, frequency, duration)` a régi (routing nélküli)
+  változaton **u16 frekvenciát is küldött** (cmd 0x0006) → az a hardver változtatható hangmagasságú
+  (passzív hangszóró) volt. A MI robotunk viszont routingos, `SpeakBeep 0x1064` CSAK duration
+  (fix ~2483 Hz buzzer az FFT szerint). Külön hardver-generáció. Ötlet: a mi SpeakBeep-ünket egy
+  extra frekvencia-arggal (ARGLEN=4) kipróbálni — szinte biztos no-op, de egy beep, perdöntő.
+
 ### Munkamódszer
 - Minden érdemi változásnál frissítendő: `CLAUDE.md` (struktúra/tények), `MEMORY.md` (napló),
   `README.md` (használat) — nem csak a kód és a CHANGELOG. (User kérése, 2026-07-07.)
